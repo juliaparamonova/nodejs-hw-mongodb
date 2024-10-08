@@ -18,13 +18,13 @@ export const startServer = () => {
     })
   );
 
-  app.get('/', (req, res) => {
+  app.get('/contacts', (req, res) => {
     res.json({
       message: 'Hello world!',
     });
   });
 
-  app.use('*', (req, res, next) => {
+  app.use('/contacts/:contactId', (req, res, next) => {
     res.status(404).json({
       message: 'Not found',
     });
