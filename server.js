@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import pino from 'pino-http';
-import { env } from './utilis/env.js';
+import { env } from './src/utilis/env.js';
 import {
   contactByIdController,
   contactsController,
-} from './controllers/contactsControllers.js'; // Исправление пути
+} from './src/controllers/contactsControllers.js';
 
 const PORT = Number(env('PORT', '3000'));
 
