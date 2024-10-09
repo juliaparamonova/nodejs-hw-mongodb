@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import express from 'express';
 
 import { env } from '../utilis/env.js';
 
@@ -11,7 +12,7 @@ export const initMongoConnection = async () => {
     mongoose.connect(
       `mongodb+srv://${user}:${password}@${url}/${db}?retryWrites=true&w=majority&appName=Cluster0`
     );
-    console.log('Mongodb connection successfuly');
+    console.log('Mongodb connection successfully');
   } catch (error) {
     console.log(error.message);
     throw error;

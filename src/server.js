@@ -1,10 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import pino from 'pino-http';
+import { env } from './utilis/env.js';
+import {
+  contactByIdController,
+  contactsController,
+} from './controllers/contactsControllers.js'; // Исправление пути
 
-const PORT = 3000;
+const PORT = Number(env('PORT', '3000'));
 
-export const startServer = () => {
+export const setupServer = () => {
   const app = express();
 
   app.use(express.json());
@@ -13,21 +18,30 @@ export const startServer = () => {
   app.use(
     pino({
       transport: {
-        targe: 'pino-pretty',
+        target: 'pino-pretty',
       },
     })
   );
 
-  app.get('/contacts', (req, res) => {
+  app.get('/', (req, res) => {
     res.json({
-      message: 'Hello world!',
+      message: 'Hello world ^_^',
     });
   });
 
-  app.use('/contacts/:contactId', (req, res, next) => {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+
+  app.get('/contacts', contactsController);
+
+  app.get('/contacts/:contactId', contactByIdController);
+
+  app.use('*', (req, res, next) => {
     res.status(404).json({
-      message: 'Not found',
+      message: `url '${req.baseUrl}' not found`,
     });
+    next();
   });
 
   app.use((err, req, res, next) => {
@@ -35,9 +49,5 @@ export const startServer = () => {
       message: 'Something went wrong',
       error: err.message,
     });
-  });
-
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
   });
 };
