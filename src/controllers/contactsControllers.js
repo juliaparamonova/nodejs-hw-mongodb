@@ -2,7 +2,6 @@ import { getAllContacts, getContactById } from '../services/contacts.js';
 
 export const contactsController = async (req, res) => {
   const contacts = await getAllContacts();
-  console.log(contacts);
   res
     .status(200)
     .json({ message: 'Successfully found contacts!', data: contacts });
