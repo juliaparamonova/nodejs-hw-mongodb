@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import { Router } from 'express';
 import {
   contactsController,
@@ -27,3 +28,14 @@ contactsRouter.patch(
 );
 
 export default contactsRouter;
+=======
+import * as contactsServices from 
+
+import { Router } from "express";
+
+const contactsRouter = express();
+
+app.get("/contacts", async (req, res)) => {
+    
+}
+>>>>>>> Stashed changes
