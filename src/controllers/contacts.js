@@ -1,14 +1,21 @@
 import createHttpError from 'http-errors';
-import {
-  createContact,
-  deleteContact,
-  getAllContacts,
-  getContactById,
-  patchContact,
-} from '../services/contacts.js';
+import * as services from '../services/contacts.js';
+import { parsePaginationParams } from '../utilis/parsePaginationParams.js';
+import { parseSortParams } from '../utilis/parseSortParams.js';
+import { parseFilterParams } from '../utilis/parseFilterParams.js';
 
 export const contactsController = async (req, res) => {
-  const contacts = await getAllContacts();
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query);
+  const filter = parseFilterParams(req.query);
+
+  const contacts = await services.getAllContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filter,
+  });
   res.status(200).json({
     message: 'Successfully found contacts!',
     data: contacts,
@@ -18,7 +25,7 @@ export const contactsController = async (req, res) => {
 export const contactByIdController = async (req, res) => {
   const { contactId } = req.params;
 
-  const contact = await getContactById(contactId);
+  const contact = await services.getContactById(contactId);
 
   if (!contact) {
     throw createHttpError(404, 'Contact not found');
@@ -31,7 +38,7 @@ export const contactByIdController = async (req, res) => {
 };
 
 export const createContactController = async (req, res) => {
-  const contact = await createContact(req.body);
+  const contact = await services.createContact(req.body);
 
   res.status(201).json({
     status: 201,
@@ -43,7 +50,7 @@ export const createContactController = async (req, res) => {
 export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
 
-  const contact = await deleteContact(contactId);
+  const contact = await services.deleteContact(contactId);
   if (!contact) {
     next(createHttpError(404, 'Contact not found'));
     return;
@@ -54,10 +61,10 @@ export const deleteContactController = async (req, res, next) => {
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
 
-  const result = await patchContact(contactId, req.body);
+  const result = await services.patchContact(contactId, req.body);
 
   if (!result) {
-    next(createHttpError(404, 'Contact not found !'));
+    next(createHttpError(404, 'Student not found !'));
     return;
   }
 
