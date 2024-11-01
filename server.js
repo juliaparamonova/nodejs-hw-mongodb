@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import pino from 'pino-http';
 import { env } from './src/utilis/env.js';
 import contactsRouter from './src/routers/contacts.js';
 import { errorHandler } from './src/middlewares/errorHandler.js';
@@ -17,14 +16,6 @@ export const setupServer = () => {
     })
   );
   app.use(cors());
-
-  app.use(
-    pino({
-      transport: {
-        target: 'pino-pretty',
-      },
-    })
-  );
 
   app.get('/', (req, res) => {
     res.json({
